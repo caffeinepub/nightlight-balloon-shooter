@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono[wght].woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque[opsz,wdth,wght].woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Night ops dark theme */
+    --background: 0.1 0.02 260;
+    --foreground: 0.92 0.05 155;
+    --card: 0.12 0.03 255;
+    --card-foreground: 0.92 0.05 155;
+    --popover: 0.14 0.03 255;
+    --popover-foreground: 0.92 0.05 155;
+    --primary: 0.75 0.22 155;
+    --primary-foreground: 0.08 0.02 255;
+    --secondary: 0.18 0.04 255;
+    --secondary-foreground: 0.85 0.06 155;
+    --muted: 0.16 0.03 255;
+    --muted-foreground: 0.5 0.05 155;
+    --accent: 0.65 0.28 155;
+    --accent-foreground: 0.08 0.02 255;
+    --destructive: 0.62 0.26 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.22 0.05 255;
+    --input: 0.18 0.04 255;
+    --ring: 0.65 0.22 155;
+    --chart-1: 0.75 0.22 155;
+    --chart-2: 0.65 0.18 200;
+    --chart-3: 0.7 0.25 80;
+    --chart-4: 0.65 0.22 310;
+    --chart-5: 0.72 0.24 40;
+    --sidebar: 0.12 0.03 255;
+    --sidebar-foreground: 0.92 0.05 155;
+    --sidebar-primary: 0.75 0.22 155;
+    --sidebar-primary-foreground: 0.08 0.02 255;
+    --sidebar-accent: 0.18 0.04 255;
+    --sidebar-accent-foreground: 0.85 0.06 155;
+    --sidebar-border: 0.22 0.05 255;
+    --sidebar-ring: 0.65 0.22 155;
+
+    /* Game specific tokens */
+    --hud-green: #00ff88;
+    --hud-green-dim: #00cc66;
+    --hud-red: #ff4444;
+    --game-bg: #05060f;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "JetBrains Mono", monospace;
+    overflow: hidden;
+  }
+
+  /* Hide cursor on canvas for game immersion */
+  .game-canvas-container {
+    cursor: none;
+  }
+}
