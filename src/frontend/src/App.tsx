@@ -300,7 +300,7 @@ function getStreakMultiplier(streak: number): number {
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const { actor } = useActor();
+  const { actor, isFetching } = useActor();
   const { identity, login, clear, isLoggingIn, isInitializing } =
     useInternetIdentity();
   const isAuthenticated = !!identity && !identity.getPrincipal().isAnonymous();
@@ -322,6 +322,7 @@ export default function App() {
   const [playerName, setPlayerName] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [personalBest, setPersonalBest] = useState<bigint | null>(null);
   const [roundEndInfo, setRoundEndInfo] = useState({
     popped: 0,
@@ -947,9 +948,7 @@ export default function App() {
       setScreenState("LEADERBOARD");
       stateRef.current.screen = "LEADERBOARD";
     } catch {
-      // Submit failed, still go to leaderboard
-      setScreenState("LEADERBOARD");
-      stateRef.current.screen = "LEADERBOARD";
+      setSubmitError("Submit failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -1799,15 +1798,33 @@ export default function App() {
                       : "LOGIN WITH INTERNET IDENTITY"}
                   </button>
                 </div>
+              ) : isFetching ? (
+                /* Logged in but actor still initializing — show loading */
+                <div
+                  style={{
+                    marginBottom: "0.5rem",
+                    padding: "0.75rem 1rem",
+                    textAlign: "center",
+                    color: "rgba(0,255,136,0.6)",
+                    fontSize: "0.75rem",
+                    letterSpacing: "0.15em",
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
+                >
+                  ⟳ INITIALIZING SECURE CONNECTION...
+                </div>
               ) : (
-                /* Logged in — show name input + submit */
+                /* Logged in and actor ready — show name input + submit */
                 <div style={{ marginBottom: "0.5rem" }}>
                   <input
                     type="text"
                     placeholder="ENTER YOUR NAME"
                     maxLength={20}
                     value={nameInput}
-                    onChange={(e) => setNameInput(e.target.value)}
+                    onChange={(e) => {
+                      setNameInput(e.target.value);
+                      if (submitError) setSubmitError("");
+                    }}
                     onKeyDown={(e) => e.key === "Enter" && submitScore()}
                     style={{
                       background: "rgba(0,255,136,0.05)",
@@ -1824,6 +1841,20 @@ export default function App() {
                       textAlign: "center",
                     }}
                   />
+                  {submitError && (
+                    <div
+                      style={{
+                        color: "#ff4444",
+                        fontSize: "0.72rem",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        letterSpacing: "0.08em",
+                        textAlign: "center",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      {submitError}
+                    </div>
+                  )}
                   <button
                     type="button"
                     onClick={submitScore}
